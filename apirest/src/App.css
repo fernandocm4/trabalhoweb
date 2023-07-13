@@ -1,0 +1,43 @@
+.App {
+  text-align: center;
+}
+
+.bloco1{
+  background-color: #3F2E3E;
+  margin-right: 100px;
+  border-radius: 10px;
+  padding: 50px;
+  color: white;
+}
+
+.bloco1 li{
+  margin-bottom: 10px;
+}
+
+.bloco2{
+  display: flex;
+  background-color: #3F2E3E;
+  padding: 10%;
+  color: white;
+  border-radius: 10px;
+}
+
+.bloco2 form{
+  display: flex;
+  flex-direction: column;
+
+}
+
+.bloco2 input{
+  width: 500px;
+  height: 30px;
+  margin-bottom: 50px;
+}
+
+.bloco-central{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  margin-left: 150px;
+  
+}
