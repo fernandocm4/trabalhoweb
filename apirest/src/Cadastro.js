@@ -8,7 +8,7 @@ class Cadastro extends Component{
   }
 
   async componentDidMount(){
-    const response = await api.post('/livros');
+    const response = await api.post('/infos');
 
     console.log(response.data);
 

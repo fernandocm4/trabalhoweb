@@ -6,78 +6,148 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
+
+app = Flask (__name__)
 CORS(app)
-
-url = os.getenv("DATABASE_URL")
-connection = psycopg2.connect(url)
-
-livros = [
+infos = [
     {
         'id': 1,
-        'título': 'As Armas da Persuasão',
-        'autor': 'Robert B. Cialdini'
+        'nome': 'Miguel',
+        'email': 'miguel@gmail.com',
+        'data': '23.03.2000'
+
     },
+
     {
         'id': 2,
-        'título': 'Sherlock Holmes O Cão dos Baskerville',
-        'autor': 'Arthur Conan Doyle'
-    },
-    {
-        'id': 3,
-        'título': 'Mitologia Nórdica',
-        'autor': 'Neil Gaiman'
-    },
-    {
-        'id': 4,
-        'título': 'A Biblioteca da Meia Noite',
-        'autor': 'Matt Haig'
-    },
+        'nome': 'Jean',
+        'email': 'jean@gmail.com',
+        'data': '14.08.2005'
+
+    }
 ]
 
+#Adicionar informações
+############################################################
+@app.route('/infos',methods=['POST'])
+def add_info():
+    nova_info = request.get_json()
+    infos.append(nova_info)
+    return jsonify(infos)
 
-CREATE_LIVROS_TABLE = ("CREATE TABLE IF NOT EXISTS livros (id SERIAL PREMARY KEY, titulo TEXT, autor TEXT);")
-INSERT_LIVROS_RETURN_ID = ("INSERTO INTO livros (titulo) VALUES (%s) RETURNING id;")
+
+#Consultar informções (Geral, por id, por nome, por email, por data de nascimento)
+#------------------------------------------------------------
+#Consultar as informações gerais
+@app.route('/infos',methods=['GET'])
+def obter_info():
+    return jsonify(infos)
+#-----------------------------------------------------------
+#Consutar info por id
+@app.route('/infos/<int:id>',methods=['GET'])
+def obter_id(id):
+    for info in infos:
+        if info.get('id') == id:
+            return jsonify(info)
+#-----------------------------------------------------------        
+#Consutar info por nome
+@app.route('/infos/<string:nome>',methods=['GET'])
+def obter_nome(nome):
+    for info in infos:
+        if info.get('nome') == nome:
+            return jsonify(info)
+#-----------------------------------------------------------
+#Consutar info por email
+@app.route('/infos/email/<string:email>', methods=['GET'])
+def obter_email(email):
+    for info in infos:
+        if info.get('email') == email:
+            return jsonify(info)
+#-----------------------------------------------------------        
+#Consutar info por data de nascimento
+@app.route('/infos/data/<string:data>',methods=['GET'])
+def obter_data(data):
+    for info in infos:
+        if info.get('data') == data:
+            return jsonify(info)
 
 
-@app.route('/livros',methods=['GET'])
-def obter_livros():
-    return jsonify(livros)
 
-@app.route('/livros/<int:id>',methods=['GET'])
-def obter_livro_por_id(id):
-    for livro in livros:
-        if livro.get('id') == id:
-            return jsonify(livro)
-        
-@app.route('/livros/<int:id>',methods=['PUT'])
-def editar_livro_por_id(id):
-    livro_alterado = request.get_json()
-    for indice,livro in enumerate(livros):
-        if livro.get('id') == id:
-            livros[indice].update(livro_alterado)
-            return jsonify(livros[indice])
 
-@app.route('/livros',methods=['POST'])
-def incluir_novo_livro():
-    novo_livro = request.get_json()
+#Editar informações por id, por nome, por email, por data de nascimento
+#############################################################
+#Editar uma info por id
+@app.route('/infos/<int:id>',methods=['PUT'])
+def editar_id(id):
+    info_alterada = request.get_json()
+    for indice,info in enumerate(infos):
+        if info.get('id') == id:
+            infos[indice].update(info_alterada)
+            return jsonify(infos[indice])
+#-----------------------------------------------------------
+#Editar uma info por nome
+@app.route('/infos/<string:nome>',methods=['PUT'])
+def editar_nome(nome):
+    info_alterada = request.get_json()
+    for indice,info in enumerate(infos):
+        if info.get('nome') == nome:
+            infos[indice].update(info_alterada)
+            return jsonify(infos[indice])
+#-----------------------------------------------------------
+#Editar uma info por email
+@app.route('/infos/email/<string:email>',methods=['PUT'])
+def editar_email(email):
+    info_alterada = request.get_json()
+    for indice,info in enumerate(infos):
+        if info.get('email') == email:
+            infos[indice].update(info_alterada)
+            return jsonify(infos[indice])
+#-----------------------------------------------------------
+#Editar uma info por data de nascimento
+@app.route('/infos/data/<string:data>',methods=['PUT'])
+def editar_data(data):
+    info_alterada = request.get_json()
+    for indice,info in enumerate(infos):
+        if info.get('data') == data:
+            infos[indice].update(info_alterada)
+            return jsonify(infos[indice])
 
-    '''titulo = novo_livro['id': 5,'título': 'taqp','autor': 'sla']
-    with connection:
-        with connection.cursor() as cursor:
-            cursor.execute(CREATE_LIVROS_TABLE)
-            cursor.execute(INSERT_LIVROS_RETURN_ID, (titulo,))
-            room_id = cursor.fetchone()[0]'''
 
-    livros.append(novo_livro)  
-    return jsonify(livros)
 
-@app.route('/livros/<int:id>',methods=['DELETE'])
-def excluir_livro(id):
-    for indice, livro in enumerate(livros):
-        if livro.get('id') == id:
-            del livros[indice]
+#Excluir informações por id, por nome, por email, por data de nascimento
+#############################################################       
+#Excluir info por id
+@app.route('/infos/<int:id>',methods=['DELETE'])
+def excluir_id(id):
+    for indice, info in enumerate(infos):
+        if info.get('id') == id:
+            del infos[indice]
+    return jsonify(infos)
+#------------------------------------------------------------
+#Excluir info por nome
+@app.route('/infos/<string:nome>',methods=['DELETE'])
+def excluir_nome(nome):
+    for indice, info in enumerate(infos):
+        if info.get('nome') == nome:
+            del infos[indice]
+    return jsonify(infos)
+#------------------------------------------------------------
+#Excluir info por email
+@app.route('/infos/email/<string:email>',methods=['DELETE'])
+def excluir_email(email):
+    for indice, info in enumerate(infos):
+        if info.get('email') == email:
+            del infos[indice]
+    return jsonify(infos)
+#------------------------------------------------------------
+#Excluir info por data de nascimento
+@app.route('/infos/data/<string:data>',methods=['DELETE'])
+def excluir_data(data):
+    for indice, info in enumerate(infos):
+        if info.get('data') == data:
+            del infos[indice]
+    return jsonify(infos)
 
-    return jsonify(livros)
 
-app.run(port=5000,host='localhost',debug=True)
+
+app.run(port=5000, host='localhost', debug=True)

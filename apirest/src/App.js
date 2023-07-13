@@ -1,44 +1,41 @@
 import React, {Component, useState} from 'react';
 import './App.css';
 import api from './api';
+import Formulario from './Formulario';
+
 
 
 class App extends Component{
 
 
   state = {
-    livros: [],
+    clientes: [],
   }
 
   async componentDidMount(){
-    const response = await api.get('/livros');
+    const response = await api.get('/infos');
 
     console.log(response.data);
 
-    this.setState({livros: response.data});
+    this.setState({clientes: response.data});
   }
 
   render(){
 
-    const {livros} = this.state;
+    const {clientes} = this.state;
 
     return(
       <div className='bloco-central'>
         <div className='bloco1'>
-          <h1>Livros</h1>
-          {livros.map(livro => (
-            <li key={livro.id}>{livro.título}</li>
+          <h1>Clientes</h1>
+          {clientes.map(cliente => (
+            <ul key={cliente.id}>{cliente.nome}<br></br>
+            {cliente.email}<br></br>
+            {cliente.data}</ul>
           ))}
         </div>
         <div className='bloco2'>
-          <form action="App.js" method="POST">
-            <h1>Cadastro</h1>
-            <label>Título do livro</label>
-            <input type="text" name="titulo"/>
-            <label>Autor do livro</label>
-            <input type="text" name="autor" />
-            <input type="submit" value="Enviar" />
-          </form>
+          <Formulario></Formulario>
         </div>
       </div>
     )
